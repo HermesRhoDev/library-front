@@ -16,9 +16,13 @@ export const Test = () => {
     password_confirmation: "1234567890",
   };
 
-  const csrf = () => axios.get("sanctum/csrf-cookie");
+  const collectionInfo = {
+    name: "testwithbook",
+    user_id: "a2a7c466-91d8-4e59-b638-6830b646dda9",
+    book_id: "0OvDOHfn2xWbCIFU"
+  };
 
-  console.log(csrf());
+  const csrf = () => axios.get("sanctum/csrf-cookie");
 
   const login = async () => {
     await csrf();
@@ -42,7 +46,7 @@ export const Test = () => {
   };
 
   const collections = async () => {
-    const user_id = 'a2316812-d397-4441-b927-4d8ecf739d5f';
+    const user_id = "a2316812-d397-4441-b927-4d8ecf739d5f";
     axios
       .get(`api/collections/${user_id}`)
       .then((response) => console.log(response.data))
@@ -50,9 +54,16 @@ export const Test = () => {
   };
 
   const collection = async () => {
-    const id = 'ba33bcea-96c6-44ba-8925-3806adf6ade1';
+    const id = "ba33bcea-96c6-44ba-8925-3806adf6ade1";
     axios
       .get(`api/collection/${id}`)
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log(error.response.data.message));
+  };
+
+  const storeCollection = async () => {
+    axios
+      .post(`api/collection/store`, collectionInfo)
       .then((response) => console.log(response.data))
       .catch((error) => console.log(error.response.data.message));
   };
@@ -61,7 +72,7 @@ export const Test = () => {
     <>
       <div className="w-full h-screen bg-black flex flex-col items-center justify-center gap-10">
         <h1 className="text-white font-bold text-4xl">Hello World !</h1>
-        <div className="flex flex-row gap-5">
+        <div className="flex flex-row gap-5 flex-wrap w-full justify-center">
           <button
             onClick={() => register()}
             className="bg-white text-blac px-5 py-2 uppercase font-bold"
@@ -85,6 +96,12 @@ export const Test = () => {
             className="bg-white text-blac px-5 py-2 uppercase font-bold"
           >
             Une Collection de mes collections
+          </button>
+          <button
+            onClick={() => storeCollection()}
+            className="bg-white text-blac px-5 py-2 uppercase font-bold"
+          >
+            Ajout d'une collection
           </button>
           <button
             onClick={() => logout()}
