@@ -27,7 +27,7 @@ export const Test = () => {
   }
 
   const userLogin = {
-    email: "lumarin2001@gmail.com",
+    email: "test@test.test",
     password: "1234567890",
   };
 
