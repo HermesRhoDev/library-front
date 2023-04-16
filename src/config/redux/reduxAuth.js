@@ -1,33 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import register from "../../actions/authAction";
-import { axios } from "../axios/configAxios";
-
-const csrf = () => axios.get("sanctum/csrf-cookie");
-
-export const logout = createAsyncThunk("auth/logout", async () => {
-  try {
-    await csrf();
-    await axios.post("logout");
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-export const login = createAsyncThunk(
-  "auth/login",
-  async ({ email, password }) => {
-    try {
-      await csrf();
-      const response = await axios.post("login", {
-        email,
-        password,
-      });
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import login from "../../actions/loginAction";
+import logout from "../../actions/logoutAction";
+import register from "../../actions/registerAction";
 
 const authSlice = createSlice({
   name: "auth",
@@ -37,7 +11,6 @@ const authSlice = createSlice({
     error: null,
     success: false,
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(register.pending, (state, action) => {
