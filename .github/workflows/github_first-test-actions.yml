@@ -20,7 +20,6 @@ jobs:
 
       - name: Créer une nouvelle branche
         run: |
-          git checkout main
           git branch "${{ steps.branch_name.outputs.branch }}"
           git checkout "${{ steps.branch_name.outputs.branch }}"
 
