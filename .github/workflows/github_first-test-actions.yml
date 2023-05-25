@@ -8,7 +8,7 @@ jobs:
 
     steps:
       - name: Vérifier le dépôt
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Extraire le message du commit
         id: commit_message
