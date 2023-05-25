@@ -9,23 +9,20 @@ jobs:
     steps:
       - name: Vérifier le dépôt
         uses: actions/checkout@v3
-      
+
       - name: Extraire le message du commit
         id: commit_message
-        run: echo "::set-output name=message::$(git log --format=%B -n 1 ${{ github.sha }})"
+        run: echo "name=message::$(git log --format=%B -n 1 ${{ github.sha }})" >> $GITHUB_OUTPUT
 
       - name: Générer le nom de la branche
         id: branch_name
-        run: |
-          MESSAGE=$(echo "${{ steps.commit_message.outputs.message }}" | tr -d '\n\r')
-          BRANCH_NAME=$(echo "$MESSAGE" | tr '[:upper:]' '[:lower:]' | tr '[:space:]' '-')
-          echo "::set-output name=branch::$BRANCH_NAME"
+        run: echo "name=branch::$(echo ${{ steps.commit_message.outputs.message }} | tr '[:upper:]' '[:lower:]' | tr '[:space:]' '-')" >> $GITHUB_OUTPUT
 
       - name: Créer une nouvelle branche
         run: |
-          git checkout -b ${{ steps.branch_name.outputs.branch }}
-          git config --local user.name "HermesRhoDev"
-          git config --local user.email "materrazzi.pro@gmail.com"
+          git checkout main
+          git branch "${{ steps.branch_name.outputs.branch }}"
+          git checkout "${{ steps.branch_name.outputs.branch }}"
 
       - name: Installer les dépendances
         run: npm install
@@ -36,5 +33,5 @@ jobs:
       - name: Pousser vers la nouvelle branche
         uses: ad-m/github-push-action@master
         with:
-          github_token: "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"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ steps.branch_name.outputs.branch }}
