@@ -1,17 +1,22 @@
 version: 2.1
 
 jobs:
-  say-hello:
+  create-and-push-branch:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
       - run:
-          name: "Afficher le message du commit"
+          name: "Extraire le message du commit"
           command: |
-            git log --format=%B -n 1 $CIRCLE_SHA1
+            commit_message=$(git log --format=%B -n 1 $CIRCLE_SHA1)
+            branch_name=$(echo $commit_message | tr '[:upper:]' '[:lower:]' | tr '[:space:]' '-')
+            git config user.name "HermesRhoDev"
+            git config user.email "materrazzi.pro@gmail.com"
+            git checkout -b $branch_name
+            git push origin $branch_name
 
 workflows:
-  say-hello-workflow:
+  create-and-push-branch-workflow:
     jobs:
-      - say-hello
+      - create-and-push-branch
