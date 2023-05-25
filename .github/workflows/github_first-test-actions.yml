@@ -1,6 +1,9 @@
 name: Créer et pousser une nouvelle branche
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   create-and-push-branch:
@@ -20,10 +23,11 @@ jobs:
 
       - name: Créer une nouvelle branche
         run: |
-          git config --local user.name 'HermesRhoDev'
-          git config --local user.email 'materrazzi.pro@gmail.com'
-          git checkout -b "${{ steps.branch_name.outputs.branch }}"
-          git push origin "${{ steps.branch_name.outputs.branch }}"
+          git config --local user.name "HermesRhoDev"
+          git config --local user.email "materrazzi.pro@gmail.com"
+          git checkout main
+          git branch "${{ steps.branch_name.outputs.branch }}"
+          git checkout "${{ steps.branch_name.outputs.branch }}"
 
       - name: Installer les dépendances
         run: npm install
