@@ -9,7 +9,8 @@ jobs:
       - run:
           name: "Afficher le message du commit"
           command: |
-            git log --format=%B -n 1 $CIRCLE_SHA1
+            commit_message=$(git log --format=%B -n 1 $CIRCLE_SHA1)
+            echo "Le message du commit est : $commit_message"
 
 workflows:
   say-hello-workflow:
