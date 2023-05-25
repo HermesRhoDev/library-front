@@ -21,7 +21,7 @@ export const Signup = () => {
     <div className="w-full bg-black h-screen flex flex-col justify-center items-center gap-16">
       <Link
         to="/"
-        className="px-7 py-4 text-black bg-white uppercase font-bold"
+        className="px-7 py-5 text-black bg-white uppercase font-bold"
       >
         Vers l'accueil
       </Link>
