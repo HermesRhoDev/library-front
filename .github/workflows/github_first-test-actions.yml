@@ -1,9 +1,6 @@
 name: Créer et pousser une nouvelle branche
 
-on:
-  push:
-    branches:
-      - main
+on: [push]
 
 jobs:
   create-and-push-branch:
@@ -11,23 +8,24 @@ jobs:
 
     steps:
       - name: Vérifier le dépôt
-        uses: actions/checkout@v3
-
+        uses: actions/checkout@v2
+      
       - name: Extraire le message du commit
         id: commit_message
-        run: echo "name=message::$(git log --format=%B -n 1 ${{ github.sha }})" >> $GITHUB_OUTPUT
+        run: echo "::set-output name=message::$(git log --format=%B -n 1 ${{ github.sha }})"
 
       - name: Générer le nom de la branche
         id: branch_name
-        run: echo "name=branch::$(echo ${{ steps.commit_message.outputs.message }} | tr '[:upper:]' '[:lower:]' | tr '[:space:]' '-')" >> $GITHUB_OUTPUT
+        run: |
+          MESSAGE=$(echo "${{ steps.commit_message.outputs.message }}" | tr -d '\n\r')
+          BRANCH_NAME=$(echo "$MESSAGE" | tr '[:upper:]' '[:lower:]' | tr '[:space:]' '-')
+          echo "::set-output name=branch::$BRANCH_NAME"
 
       - name: Créer une nouvelle branche
         run: |
+          git checkout -b ${{ steps.branch_name.outputs.branch }}
           git config --local user.name "HermesRhoDev"
           git config --local user.email "materrazzi.pro@gmail.com"
-          git checkout main
-          git branch "${{ steps.branch_name.outputs.branch }}"
-          git checkout "${{ steps.branch_name.outputs.branch }}"
 
       - name: Installer les dépendances
         run: npm install
