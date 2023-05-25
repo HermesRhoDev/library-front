@@ -1,0 +1,37 @@
+name: Créer et pousser une nouvelle branche
+
+on: [push]
+
+jobs:
+  create-and-push-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Vérifier le dépôt
+        uses: actions/checkout@v2
+
+      - name: Extraire le message du commit
+        id: commit_message
+        run: echo "::set-output name=message::$(git log --format=%B -n 1 ${{ github.sha }})"
+
+      - name: Générer le nom de la branche
+        id: branch_name
+        run: echo "::set-output name=branch::$(echo ${{ steps.commit_message.outputs.message }} | tr '[:upper:]' '[:lower:]' | tr '[:space:]' '-')"
+
+      - name: Créer une nouvelle branche
+        run: |
+          git config --local user.name "HermesRhoDev"
+          git config --local user.email "materrazzi.pro@gmail.com"
+          git checkout -b ${{ steps.branch_name.outputs.branch }}
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Build de l'application React
+        run: npm run build
+
+      - name: Pousser vers la nouvelle branche
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.branch_name.outputs.branch }}
