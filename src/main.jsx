@@ -7,12 +7,13 @@ import { fetchCurrentUser } from "./actions/fetchCurrentUser";
 import logout from "./actions/logoutAction";
 import "./assets/styles/index.css";
 import "./assets/styles/styles.css";
+import "react-tooltip/dist/react-tooltip.css";
 import { Accueil } from "./pages/accueil";
 import { Error404 } from "./pages/error404";
+import { Favorites } from "./pages/favoris";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
 import { Signup } from "./pages/signup";
-import { Test } from "./pages/test";
 import { persistor, store } from "./store";
 
 const router = createBrowserRouter([
@@ -34,8 +35,12 @@ const router = createBrowserRouter([
     element: <Accueil />,
   },
   {
-    path: "/test",
-    element: <Test />,
+    path: "/mesfavoris",
+    element: <Favorites />,
+  },
+  {
+    path: "/mescollections",
+    element: <Favorites />,
   },
 ]);
 
