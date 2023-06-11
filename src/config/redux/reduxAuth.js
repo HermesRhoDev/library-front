@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchCurrentUser } from "../../actions/fetchCurrentUser";
 import login from "../../actions/loginAction";
 import logout from "../../actions/logoutAction";
 import register from "../../actions/registerAction";
@@ -51,6 +52,20 @@ const authSlice = createSlice({
       .addCase(logout.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
+      })
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
+        state.isLoading = false;
+        state.error = null;
+      })
+      .addCase(fetchCurrentUser.rejected, (state, action) => {
+        state.userInfo = null;
+        state.isLoading = false;
+        state.error = action.error.message;
       });
   },
 });

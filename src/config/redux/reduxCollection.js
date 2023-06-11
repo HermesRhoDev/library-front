@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import myCollections from "../../actions/myCollectionAction";
+import { fetchCollections } from "../../actions/myCollectionAction";
 
 const collectionSlice = createSlice({
   name: "collection",
@@ -10,23 +10,23 @@ const collectionSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(myCollections.pending, (state, action) => {
+      .addCase(fetchCollections.pending, (state, action) => {
         state.isLoading = true;
         state.hasError = false;
       })
-      .addCase(myCollections.fulfilled, (state, action) => {
+      .addCase(fetchCollections.fulfilled, (state, action) => {
         state.collectionInfo = action.payload;
         state.isLoading = false;
         state.hasError = false;
       })
-      .addCase(myCollections.rejected, (state, action) => {
+      .addCase(fetchCollections.rejected, (state, action) => {
         state.hasError = true;
         state.isLoading = false;
       });
   },
 });
 
-export const selectMyCollections = (state) => state.collection.collectionInfo;
+export const selectFetchCollections = (state) => state.collection.collectionInfo;
 export const selectLoadingState = (state) => state.collection.isLoading;
 export const selectErrorState = (state) => state.collection.hasError;
 
