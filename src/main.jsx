@@ -1,36 +1,88 @@
-// REACT IMPORT \\
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "react-tooltip/dist/react-tooltip.css";
 import { PersistGate } from "redux-persist/integration/react";
+import { fetchCurrentUser } from "./actions/fetchCurrentUser";
+import logout from "./actions/logoutAction";
 import "./assets/styles/index.css";
+import "./assets/styles/styles.css";
+import { Accueil } from "./pages/accueil";
+import { BookDetails } from "./pages/bookDetails";
+import { MyCollections } from "./pages/collections";
+import { Error404 } from "./pages/error404";
+import { Favorites } from "./pages/favorites";
+import { Home } from "./pages/home";
 import { Login } from "./pages/login";
 import { Signup } from "./pages/signup";
-import { Test } from "./pages/test";
+import { SignupConfirmation } from "./pages/signupConfirmation";
 import { persistor, store } from "./store";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Test />,
+    element: <Home />,
+    errorElement: <Error404 />,
   },
   {
-    path: "/signup",
+    path: "/inscription",
     element: <Signup />,
   },
   {
-    path: "/login",
+    path: "/inscription-confirmation",
+    element: <SignupConfirmation />,
+  },
+  {
+    path: "/connexion",
     element: <Login />,
+  },
+  {
+    path: "/accueil",
+    element: <Accueil />,
+  },
+  {
+    path: "/mesfavoris",
+    element: <Favorites />,
+  },
+  {
+    path: "/mescollections",
+    element: <MyCollections />,
+  },
+  {
+    path: "/accueil/livre-detail/:id",
+    element: <BookDetails />,
   },
 ]);
 
+const checkAuthentication = async () => {
+  try {
+    await store.dispatch(fetchCurrentUser());
+  } catch (error) {
+    await store.dispatch(logout());
+  }
+};
+
+checkAuthentication();
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <>
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <RouterProvider router={router} />
-      </PersistGate>
-    </Provider>
-  </>
+  <Provider store={store}>
+    <ToastContainer
+      position="top-center"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="dark"
+    />
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router} />
+    </PersistGate>
+  </Provider>
 );

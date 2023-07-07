@@ -1,15 +1,19 @@
 import { Field, Form, Formik } from "formik";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import register from "../../actions/registerAction";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
 import { SignupSchemaValidation } from "../../utils/schema/yup/signupYup";
+import { TabTitle } from "../../utils/tabtitle";
 
 export const Signup = () => {
+  TabTitle("Inscription - In The Pocket");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = useSelector(selectUserInfo);
+  const [registerError, setRegisterError] = useState(null);
 
   useEffect(() => {
     if (userInfo) {
@@ -18,105 +22,179 @@ export const Signup = () => {
   }, [userInfo]);
 
   return (
-    <div className="w-full bg-black h-screen flex flex-col justify-center items-center gap-16">
-      <Link
-        to="/"
-        className="px-7 py-4 text-black bg-white uppercase font-bold"
+    <div className="w-full flex flex-row h-screen">
+      <div
+        className="
+          w-2/5 
+          bg-bg-waves-dark 
+          bg-cover flex 
+          justify-center 
+          items-center 
+          max-[640px]:hidden
+          flex-col
+          gap-10
+        "
       >
-        Vers l'accueil
-      </Link>
-      <Formik
-        initialValues={{
-          first_name: "",
-          last_name: "",
-          email: "",
-          age: 0,
-          pseudo: "",
-          password: "",
-          password_confirmation: "",
-        }}
-        validationSchema={SignupSchemaValidation}
-        onSubmit={(values) => {
-          dispatch(register(values));
-          navigate("/");
-        }}
-      >
-        {({ errors, touched }) => (
-          <Form className="flex flex-col gap-10">
-            <Field
-              name="first_name"
-              placeholder="Prénom"
-              className="px-10 py-5 rounded-full font-bold"
-            />
-            {errors.first_name && touched.first_name ? (
-              <div className="text-white uppercase font-bold">
-                {errors.first_name}
+        <img
+          src="/src/assets/images/inthepocket_white_logo.png"
+          alt="In The Pocket White Logo"
+          className="w-32"
+        />
+        <h1 className="title-light text-5xl">INSCRIPTION</h1>
+      </div>
+      <div className="w-3/5 flex justify-center min-h-screen h-fit items-center flex-col max-[640px]:w-full gap-5 py-10 px-5">
+        <img
+          src="/src/assets/images/inthepocket_black_logo.png"
+          alt="In The Pocket White Logo"
+          className="w-32 max-[640px]:w-24 max-[640px]:block hidden"
+        />
+        <h2 className="max-[640px]:block title-dark hidden text-4xl max-[640px]:text-2xl">
+          INSCRIPTION
+        </h2>
+        <Formik
+          initialValues={{
+            first_name: "",
+            last_name: "",
+            email: "",
+            age: 0,
+            pseudo: "",
+            password: "",
+            password_confirmation: "",
+          }}
+          validationSchema={SignupSchemaValidation}
+          onSubmit={async (values) => {
+            const result = await dispatch(register(values));
+            if (register.rejected.match(result)) {
+              setRegisterError(result.error.message);
+            } else if (register.fulfilled.match(result)) {
+              navigate("/inscription-confirmation");
+            }
+          }}
+        >
+          {({ errors, touched }) => (
+            <Form className="flex flex-col gap-5 max-[640px]:gap-5 justify-center items-center">
+              {registerError && (
+                <div className="max-[640px]:px-0 px-10 py-2 text-secondary text-center bg-red-800">
+                  {registerError}
+                </div>
+              )}
+              <div className="flex flex-row gap-5 max-[640px]:flex-col">
+                <div>
+                  <Field
+                    name="first_name"
+                    placeholder="Prénom"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
+                  />
+                  {errors.first_name && touched.first_name ? (
+                    <div className="max-[640px]:text-sm text-red-600">
+                      {errors.first_name}
+                    </div>
+                  ) : null}
+                </div>
+
+                <div>
+                  <Field
+                    name="last_name"
+                    placeholder="Nom"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
+                  />
+                  {errors.last_name && touched.last_name ? (
+                    <div className="max-[640px]:text-sm text-red-600">
+                      {errors.last_name}
+                    </div>
+                  ) : null}
+                </div>
               </div>
-            ) : null}
 
-            <Field
-              name="last_name"
-              placeholder="Nom"
-              className="px-10 py-5 rounded-full font-bold"
-            />
-            {errors.last_name && touched.last_name ? (
-              <div>{errors.last_name}</div>
-            ) : null}
+              <div className="flex flex-row max-[640px]:flex-col gap-5">
+                <div>
+                  <Field
+                    name="pseudo"
+                    placeholder="Pseudo"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
+                  />
+                  {errors.pseudo && touched.pseudo ? (
+                    <div className="max-[640px]:text-sm text-red-600">
+                      {errors.pseudo}
+                    </div>
+                  ) : null}
+                </div>
 
-            <Field
-              name="pseudo"
-              placeholder="Pseudo"
-              className="px-10 py-5 rounded-full font-bold"
-            />
-            {errors.pseudo && touched.pseudo ? (
-              <div>{errors.pseudo}</div>
-            ) : null}
+                <div>
+                  <Field
+                    name="age"
+                    type="number"
+                    placeholder="Age"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
+                  />
+                  {errors.age && touched.age ? (
+                    <div className="max-[640px]:text-sm text-red-600">
+                      {errors.age}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
 
-            <Field
-              name="age"
-              type="number"
-              placeholder="Age"
-              className="px-10 py-5 rounded-full font-bold"
-            />
-            {errors.age && touched.age ? <div>{errors.age}</div> : null}
+              <div className="w-full">
+                <Field
+                  name="email"
+                  type="email"
+                  placeholder="Mail"
+                  className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
+                />
+                {errors.email && touched.email ? (
+                  <div className="max-[640px]:text-sm text-red-600">
+                    {errors.email}
+                  </div>
+                ) : null}
+              </div>
 
-            <Field
-              name="email"
-              type="email"
-              placeholder="Mail"
-              className="px-10 py-5 rounded-full font-bold"
-            />
-            {errors.email && touched.email ? <div>{errors.email}</div> : null}
+              <div className="flex flex-row max-[640px]:flex-col gap-5">
+                <div>
+                  <Field
+                    name="password"
+                    type="password"
+                    placeholder="Mot de passe"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
+                  />
+                  {errors.password && touched.password ? (
+                    <div className="max-[640px]:text-sm text-red-600">
+                      {errors.password}
+                    </div>
+                  ) : null}
+                </div>
+                <div>
+                  <Field
+                    name="password_confirmation"
+                    type="password"
+                    placeholder="Confirmation mot de passe"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
+                  />
+                  {errors.password_confirmation &&
+                  touched.password_confirmation ? (
+                    <div className="max-[640px]:text-sm text-red-600">
+                      {errors.password_confirmation}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
 
-            <Field
-              name="password"
-              type="password"
-              placeholder="Mot de passe"
-              className="px-10 py-5 rounded-full font-bold"
-            />
-            {errors.password && touched.password ? (
-              <div>{errors.password}</div>
-            ) : null}
-
-            <Field
-              name="password_confirmation"
-              type="password"
-              placeholder="Confirmation mot de passe"
-              className="px-10 py-5 rounded-full font-bold"
-            />
-            {errors.password_confirmation && touched.password_confirmation ? (
-              <div>{errors.password_confirmation}</div>
-            ) : null}
-
-            <button
-              type="submit"
-              className="px-7 py-4 text-black bg-white uppercase font-bold"
-            >
-              M'inscrire
-            </button>
-          </Form>
-        )}
-      </Formik>
+              <button
+                type="submit"
+                className="px-10 py-5 max-[640px]:p-2 text-secondary bg-primary rounded-full uppercase font-bold text-sm"
+              >
+                M'inscrire
+              </button>
+            </Form>
+          )}
+        </Formik>
+        <div className="flex items-center justify-center flex-col">
+          <p className="text-primary">Avez-vous déjà un compte ?</p>
+          <Link to="/connexion" className="text-primary font-bold">
+            Connexion
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };

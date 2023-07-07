@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
 import { axios } from "../config/axios/configAxios";
 
 const csrf = () => axios.get("sanctum/csrf-cookie");
@@ -27,7 +28,16 @@ const register = createAsyncThunk(
       });
       return response.data;
     } catch (error) {
-      console.log(error);
+      if (
+        error instanceof AxiosError &&
+        error.response &&
+        error.response.data
+      ) {
+        const errorMessage = error.response.data.message;
+        throw new Error(errorMessage);
+      } else {
+        throw error;
+      }
     }
   }
 );

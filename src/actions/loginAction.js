@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { axios } from "../config/axios/configAxios";
+import { axios } from "../config/axios/configAxios.js";
 
 const csrf = () => axios.get("sanctum/csrf-cookie");
 
@@ -12,7 +12,11 @@ const login = createAsyncThunk("auth/login", async ({ email, password }) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    if (error.response.status === 422) {
+      const errorMessage = error.response.data.message;
+      throw new Error(errorMessage);
+    }
+    throw error;
   }
 });
 
