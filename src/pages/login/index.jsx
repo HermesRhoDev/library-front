@@ -79,7 +79,7 @@ export const Login = () => {
                   name="email"
                   type="email"
                   placeholder="E-Mail"
-                  className="px-10 py-5 max-[640px]:p-5 font-bold bg-primary text-secondary"
+                  className="px-10 py-5 max-[640px]:p-5 font-bold bg-primary rounded-full text-secondary"
                 />
                 {errors.email && touched.email ? (
                   <div className="max-[640px]:text-sm text-red-600">
@@ -92,7 +92,7 @@ export const Login = () => {
                   name="password"
                   type={"password"}
                   placeholder="Mot de passe"
-                  className="px-10 py-5 max-[640px]:p-5 font-bold bg-primary text-secondary focus"
+                  className="px-10 py-5 max-[640px]:p-5 font-bold bg-primary text-secondary rounded-full focus"
                 />
                 {errors.password && touched.password ? (
                   <div className="max-[640px]:text-sm text-red-600">
@@ -102,7 +102,7 @@ export const Login = () => {
               </div>
               <button
                 type="submit"
-                className="px-10 py-5 max-[640px]:p-5 text-secondary bg-primary uppercase font-bold text-sm"
+                className="px-10 py-5 max-[640px]:p-5 text-secondary rounded-full bg-primary uppercase font-bold text-sm"
               >
                 Me Connecter
               </button>
@@ -111,7 +111,7 @@ export const Login = () => {
         </Formik>
         <div className="flex items-center justify-center flex-col">
           <p className="text-primary">Pas de compte ?</p>
-          <Link to="/signup" className="text-primary font-bold">
+          <Link to="/inscription" className="text-primary font-bold">
             Créer un compte
           </Link>
         </div>

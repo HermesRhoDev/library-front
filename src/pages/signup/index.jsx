@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from "formik";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import register from "../../actions/registerAction";
@@ -13,6 +13,7 @@ export const Signup = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInfo = useSelector(selectUserInfo);
+  const [registerError, setRegisterError] = useState(null);
 
   useEffect(() => {
     if (userInfo) {
@@ -64,21 +65,25 @@ export const Signup = () => {
           onSubmit={async (values) => {
             const result = await dispatch(register(values));
             if (register.rejected.match(result)) {
-              const errorMessage = result.error.message;
-              console.log(errorMessage);
+              setRegisterError(result.error.message);
             } else if (register.fulfilled.match(result)) {
-              navigate("/");
+              navigate("/inscription-confirmation");
             }
           }}
         >
           {({ errors, touched }) => (
             <Form className="flex flex-col gap-5 max-[640px]:gap-5 justify-center items-center">
+              {registerError && (
+                <div className="max-[640px]:px-0 px-10 py-2 text-secondary text-center bg-red-800">
+                  {registerError}
+                </div>
+              )}
               <div className="flex flex-row gap-5 max-[640px]:flex-col">
                 <div>
                   <Field
                     name="first_name"
                     placeholder="Prénom"
-                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary text-secondary"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
                   />
                   {errors.first_name && touched.first_name ? (
                     <div className="max-[640px]:text-sm text-red-600">
@@ -91,7 +96,7 @@ export const Signup = () => {
                   <Field
                     name="last_name"
                     placeholder="Nom"
-                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary text-secondary"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
                   />
                   {errors.last_name && touched.last_name ? (
                     <div className="max-[640px]:text-sm text-red-600">
@@ -106,7 +111,7 @@ export const Signup = () => {
                   <Field
                     name="pseudo"
                     placeholder="Pseudo"
-                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary text-secondary"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
                   />
                   {errors.pseudo && touched.pseudo ? (
                     <div className="max-[640px]:text-sm text-red-600">
@@ -120,7 +125,7 @@ export const Signup = () => {
                     name="age"
                     type="number"
                     placeholder="Age"
-                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary text-secondary"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
                   />
                   {errors.age && touched.age ? (
                     <div className="max-[640px]:text-sm text-red-600">
@@ -135,7 +140,7 @@ export const Signup = () => {
                   name="email"
                   type="email"
                   placeholder="Mail"
-                  className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary text-secondary"
+                  className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
                 />
                 {errors.email && touched.email ? (
                   <div className="max-[640px]:text-sm text-red-600">
@@ -150,7 +155,7 @@ export const Signup = () => {
                     name="password"
                     type="password"
                     placeholder="Mot de passe"
-                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary text-secondary"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
                   />
                   {errors.password && touched.password ? (
                     <div className="max-[640px]:text-sm text-red-600">
@@ -163,7 +168,7 @@ export const Signup = () => {
                     name="password_confirmation"
                     type="password"
                     placeholder="Confirmation mot de passe"
-                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary text-secondary"
+                    className="w-full px-10 py-5 max-[640px]:p-2 font-bold bg-primary rounded-full text-secondary"
                   />
                   {errors.password_confirmation &&
                   touched.password_confirmation ? (
@@ -176,7 +181,7 @@ export const Signup = () => {
 
               <button
                 type="submit"
-                className="px-10 py-5 max-[640px]:p-2 text-secondary bg-primary uppercase font-bold text-sm"
+                className="px-10 py-5 max-[640px]:p-2 text-secondary bg-primary rounded-full uppercase font-bold text-sm"
               >
                 M'inscrire
               </button>
@@ -185,7 +190,7 @@ export const Signup = () => {
         </Formik>
         <div className="flex items-center justify-center flex-col">
           <p className="text-primary">Avez-vous déjà un compte ?</p>
-          <Link to="/login" className="text-primary font-bold">
+          <Link to="/connexion" className="text-primary font-bold">
             Connexion
           </Link>
         </div>

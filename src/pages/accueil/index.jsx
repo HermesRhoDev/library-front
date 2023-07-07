@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchCollections } from "../../actions/myCollectionAction";
 import { FillHeart } from "../../assets/svg/fillHeart";
 import { StrokeHeart } from "../../assets/svg/strokeHeart";
@@ -10,6 +10,8 @@ import { axiosGoogleBookApi } from "../../config/axios/configAxiosGoogle";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
 import { selectFetchCollections } from "../../config/redux/reduxCollection";
 import { TabTitle } from "../../utils/tabtitle";
+import { toast } from "react-toastify";
+import { toastConfig } from "../../utils/toast/config";
 
 export const Accueil = () => {
   TabTitle("Accueil - In The Pocket");
@@ -39,7 +41,7 @@ export const Accueil = () => {
       dispatch(fetchCollections());
       getGoogleBooks();
     } else {
-      navigate("/login");
+      navigate("/connexion");
     }
   }, [userInfo, dispatch, navigate]);
 
@@ -83,6 +85,7 @@ export const Accueil = () => {
         }
       );
       dispatch(fetchCollections());
+      toast.success("Livre ajouté aux favoris !", { toastConfig });
       return response;
     } catch (error) {
       console.log(error);
@@ -117,6 +120,7 @@ export const Accueil = () => {
         `/api/collection/${collectionFavoris}/remove-book/${bookId}`
       );
       dispatch(fetchCollections());
+      toast.success("Livre retiré des favoris !", { toastConfig });
       return response;
     } catch (error) {
       console.log(error);
@@ -125,13 +129,14 @@ export const Accueil = () => {
 
   return (
     <Layout>
-      <div className="w-full grid 2xl:grid-cols-10 max-[768px]:grid-cols-3 grid-cols-5 gap-y-10 justify-items-center">
+      <div className="w-full grid 2xl:grid-cols-10 max-[768px]:grid-cols-2 grid-cols-5 gap-y-10 justify-items-center">
         {googleBooks
           ? googleBooks.map((googleBook) => {
               let id = googleBook.id;
               let title = googleBook["volumeInfo"]["title"];
               let cover_link =
-                googleBook["volumeInfo"]["imageLinks"]["thumbnail"];
+                googleBook["volumeInfo"]["imageLinks"]?.thumbnail ??
+                "https://howfix.net/wp-content/uploads/2018/02/sIaRmaFSMfrw8QJIBAa8mA-article.png";
 
               const isFavoris =
                 collectionFavoris &&
@@ -143,7 +148,7 @@ export const Accueil = () => {
               return (
                 <div
                   key={id}
-                  className="hover:scale-110 ease-linear duration-200"
+                  className="hover:scale-105 ease-linear duration-200"
                 >
                   <div className="h-52 shadow-xl w-fit flex flex-row relative rounded-lg">
                     <div className="absolute bg-white rounded-full p-1 shadow-lg -top-2 -left-2">
@@ -155,12 +160,15 @@ export const Accueil = () => {
                         />
                       )}
                     </div>
-                    <img
-                      className="h-full rounded-lg w-32 cursor-pointer"
-                      src={cover_link}
-                      alt={title}
-                      onClick={() => console.log("googleBookClick")}
-                    />
+                    <Link to={"/accueil/livre-detail/" + id}>
+                      <img
+                        className="h-full rounded-lg w-32 cursor-pointer"
+                        src={cover_link}
+                        alt={title}
+                        onClick={() => console.log("googleBookClick")}
+                        loading="lazy"
+                      />
+                    </Link>
                   </div>
                   <div
                     className="w-32 mt-2"

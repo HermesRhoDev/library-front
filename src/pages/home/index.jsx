@@ -25,7 +25,7 @@ export const Home = () => {
         Votre bibliothèque à portée de main
       </p>
       <Link
-        to="/login"
+        to="/connexion"
         className="px-6 py-4 bg-secondary text-primary font-bold uppercase"
       >
         COMMENCER

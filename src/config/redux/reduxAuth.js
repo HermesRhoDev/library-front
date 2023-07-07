@@ -18,14 +18,15 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = false;
       })
-      .addCase(register.fulfilled, (state, { payload }) => {
-        state.userInfo = payload;
+      .addCase(register.fulfilled, (state, action) => {
+        state.success = true;
         state.loading = false;
         state.error = false;
       })
       .addCase(register.rejected, (state, action) => {
         state.error = true;
         state.loading = false;
+        state.success = false;
       })
       .addCase(login.pending, (state, action) => {
         state.loading = true;
@@ -71,5 +72,6 @@ const authSlice = createSlice({
 });
 
 export const selectUserInfo = (state) => state.auth.userInfo;
+export const selectRegisterSuccess = (state) => state.auth.success;
 
 export const authReducer = authSlice.reducer;
