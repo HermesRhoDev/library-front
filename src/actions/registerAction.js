@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
-import { axios } from "../config/axios/configAxios";
+import { myAxios } from "../config/axios/configAxios";
 
-const csrf = () => axios.get("sanctum/csrf-cookie");
+const csrf = () => myAxios.get("sanctum/csrf-cookie");
 
 const register = createAsyncThunk(
   "auth/register",
@@ -17,7 +17,7 @@ const register = createAsyncThunk(
   }) => {
     try {
       await csrf();
-      const response = await axios.post("register", {
+      const response = await myAxios.post("register", {
         first_name,
         last_name,
         pseudo,

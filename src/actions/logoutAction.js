@@ -1,12 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { axios } from "../config/axios/configAxios";
+import { myAxios } from "../config/axios/configAxios";
 
-const csrf = () => axios.get("sanctum/csrf-cookie");
+const csrf = () => myAxios.get("sanctum/csrf-cookie");
 
 const logout = createAsyncThunk("auth/logout", async () => {
   try {
     await csrf();
-    await axios.post("logout");
+    await myAxios.post("logout");
   } catch (error) {
     console.log(error);
   }

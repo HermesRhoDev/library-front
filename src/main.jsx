@@ -12,11 +12,14 @@ import "./assets/styles/index.css";
 import "./assets/styles/styles.css";
 import { Accueil } from "./pages/accueil";
 import { BookDetails } from "./pages/bookDetails";
+import { CollectionDetails } from "./pages/collectionDetails";
 import { MyCollections } from "./pages/collections";
+import { Community } from "./pages/community";
 import { Error404 } from "./pages/error404";
 import { Favorites } from "./pages/favorites";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
+import SearchResults from "./pages/searchResults";
 import { Signup } from "./pages/signup";
 import { SignupConfirmation } from "./pages/signupConfirmation";
 import { persistor, store } from "./store";
@@ -54,6 +57,18 @@ const router = createBrowserRouter([
   {
     path: "/accueil/livre-detail/:id",
     element: <BookDetails />,
+  },
+  {
+    path: "/mescollections/collection/:id",
+    element: <CollectionDetails />,
+  },
+  {
+    path: "/communaute",
+    element: <Community />,
+  },
+  {
+    path: "/resultats-de-recherche",
+    element: <SearchResults />,
   },
 ]);
 

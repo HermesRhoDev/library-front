@@ -42,11 +42,11 @@ export const Modal = () => {
                 d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
               />
             </svg>
-            <span className="sr-only">Close modal</span>
+            <span className="sr-only">Fermer la modal</span>
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-6 flex items-center justify-center">
           <Formik
             initialValues={{ name: "", user_id: selectUserInfos.id }}
             validationSchema={CreateColelctionValidation}
@@ -55,18 +55,21 @@ export const Modal = () => {
               if (createCollection.fulfilled.match(result)) {
                 dispatch(fetchCollections());
               }
-              console.log(result);
             }}
           >
             {({ errors, touched }) => (
-              <Form>
-                <Field name="name" placeholder="Nom de la collection" />
+              <Form className="flex flex-col justify-center items-center gap-5">
+                <Field
+                  name="name"
+                  placeholder="Nom de la collection"
+                  className="py-2 px-5 rounded-full bg-primary text-secondary"
+                />
                 {errors.name && touched.name ? (
                   <div className="max-[640px]:text-sm text-red-600">
                     {errors.name}
                   </div>
                 ) : null}
-                <div className="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b">
+                <div className="flex items-center justify-center space-x-2 rounded-b">
                   <button
                     type="submit"
                     className="text-secondary bg-green-600 hover:bg-green-700 font-medium rounded-full text-sm px-5 py-2.5 text-center"
