@@ -1,24 +1,33 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { addBookToFavoris } from "../../actions/addBookToFavorisAction";
+import { fetchCollections } from "../../actions/myCollectionAction";
+import { removeBookFromFavoris } from "../../actions/removeBookFromFavoris";
 import { FillHeart } from "../../assets/svg/fillHeart";
 import { StrokeHeart } from "../../assets/svg/strokeHeart";
 import Layout from "../../components/layout";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
 import { selectFetchCollections } from "../../config/redux/reduxCollection";
+import { TabTitle } from "../../utils/tabtitle";
 
 export const Favorites = () => {
+  TabTitle("Favoris - In The Pocket");
+
   const collections = useSelector(selectFetchCollections);
   const favoriteCollection = collections.find(
     (collection) => collection.name === "Favoris"
   );
   const navigate = useNavigate();
   const userInfo = useSelector(selectUserInfo);
+  const dispatch = useDispatch();
+  const collectionFavoris = favoriteCollection?.id;
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/");
+      navigate("/connexion");
     }
+    dispatch(fetchCollections());
   }, [userInfo]);
 
   return (
@@ -26,7 +35,7 @@ export const Favorites = () => {
       {collections &&
       favoriteCollection &&
       favoriteCollection.books.length > 0 ? (
-        <div className="w-full grid 2xl:grid-cols-10 max-[768px]:grid-cols-3 grid-cols-5 gap-y-10 justify-items-center">
+        <div className="w-full grid 2xl:grid-cols-10 max-[768px]:grid-cols-2 grid-cols-5 gap-y-10 justify-items-center">
           {favoriteCollection.books.map((favoriteBook) => {
             let id = favoriteBook.id;
             let title = favoriteBook.title;
@@ -40,15 +49,25 @@ export const Favorites = () => {
             return (
               <div
                 key={id}
-                className="hover:scale-110 ease-linear duration-200"
+                className="hover:scale-105 ease-linear duration-200"
               >
                 <div className="h-52 shadow-xl w-fit flex flex-row relative rounded-lg">
                   <div className="absolute bg-white rounded-full p-1 shadow-lg -top-2 -left-2">
                     {isFavoris ? (
-                      <FillHeart onClick={() => removeBookFromFavoris(id)} />
+                      <FillHeart
+                        onClick={() =>
+                          removeBookFromFavoris(id, dispatch, collectionFavoris)
+                        }
+                      />
                     ) : (
                       <StrokeHeart
-                        onClick={() => handleImageClick(googleBook)}
+                        onClick={() => {
+                          addBookToFavoris(
+                            dispatch,
+                            googleBook,
+                            collectionFavoris
+                          );
+                        }}
                       />
                     )}
                   </div>

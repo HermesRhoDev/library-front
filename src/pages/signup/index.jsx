@@ -17,7 +17,7 @@ export const Signup = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate("/accueil");
     }
   }, [userInfo]);
 

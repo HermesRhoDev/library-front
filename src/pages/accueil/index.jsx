@@ -2,16 +2,15 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { handleAddBookToFavorisAction } from "../../actions/handleAddBookToFavorisAction";
 import { fetchCollections } from "../../actions/myCollectionAction";
+import { removeBookFromFavoris } from "../../actions/removeBookFromFavoris";
 import { FillHeart } from "../../assets/svg/fillHeart";
 import { StrokeHeart } from "../../assets/svg/strokeHeart";
 import Layout from "../../components/layout";
-import { myAxios } from "../../config/axios/configAxios";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
 import { selectFetchCollections } from "../../config/redux/reduxCollection";
 import { TabTitle } from "../../utils/tabtitle";
-import { toastConfig } from "../../utils/toast/config";
 
 export const Accueil = () => {
   TabTitle("Accueil - In The Pocket");
@@ -22,20 +21,19 @@ export const Accueil = () => {
   const navigate = useNavigate();
   const [googleBooks, setGoogleBooks] = useState(null);
   const [collectionFavoris, setCollectionFavoris] = useState(null);
-  const [favorisCount, setFavorisCount] = useState(0);
   const [collectionsLogged, setCollectionsLogged] = useState(false);
   const [startIndex, setStartIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const getGoogleBooks = async () => {
     try {
-      setLoading(true); // Définit "loading" sur true pendant la récupération des livres
+      setLoading(true);
       const response = await axios.get(
         `https://www.googleapis.com/books/v1/volumes?q=$%7Bexample%7D&maxResults=40&startIndex=${startIndex}`
       );
       setGoogleBooks(response.data.items);
-      setLoading(false); // Définit "loading" sur false une fois les livres récupérés
-      window.scrollTo(0, 0); // Redirige vers le haut de la page
+      setLoading(false);
+      window.scrollTo(0, 0);
     } catch (error) {
       throw error;
     }
@@ -55,8 +53,6 @@ export const Accueil = () => {
     }
   }, [startIndex]);
 
-  const csrf = () => myAxios.get("sanctum/csrf-cookie");
-
   useEffect(() => {
     if (userInfo) {
       dispatch(fetchCollections());
@@ -75,78 +71,8 @@ export const Accueil = () => {
       )?.id;
 
       setCollectionFavoris(favoris);
-
-      const favorisCollection = collections.find(
-        (collection) => collection.id === favoris
-      );
-
-      if (favorisCollection) {
-        setFavorisCount(favorisCollection.books.length);
-      }
     }
   }, [userInfo, collections, collectionsLogged]);
-
-  const addBookToFavoris = async (googleBookInfo) => {
-    const { id, title, pageCount, authors, categories, cover_link, summary } =
-      googleBookInfo;
-
-    try {
-      await csrf();
-
-      const response = await myAxios.post(
-        `/api/collection/${collectionFavoris}/add-book`,
-        {
-          id,
-          title,
-          pageCount,
-          authors,
-          categories,
-          cover_link,
-          summary,
-        }
-      );
-      dispatch(fetchCollections());
-      toast.success("Livre ajouté aux favoris !", { toastConfig });
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const handleImageClick = (googleBook) => {
-    if (googleBook && googleBook.volumeInfo) {
-      const { title, imageLinks, description } = googleBook.volumeInfo;
-      const id = googleBook.id;
-      const categories = googleBook["volumeInfo"]["categories"]?.shift();
-      const authors = googleBook["volumeInfo"]["authors"]?.shift();
-      const pageCount = googleBook.volumeInfo.pageCount || 0;
-
-      addBookToFavoris({
-        id,
-        title,
-        pageCount,
-        authors,
-        categories,
-        cover_link: imageLinks && imageLinks.thumbnail,
-        summary: description,
-      });
-    }
-  };
-
-  const removeBookFromFavoris = async (bookId) => {
-    try {
-      await csrf();
-
-      const response = await myAxios.delete(
-        `/api/collection/${collectionFavoris}/remove-book/${bookId}`
-      );
-      dispatch(fetchCollections());
-      toast.success("Livre retiré des favoris !", { toastConfig });
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
 
   return (
     <Layout>
@@ -178,11 +104,23 @@ export const Accueil = () => {
                       <div className="absolute bg-white rounded-full p-1 shadow-lg -top-2 -left-2">
                         {isFavoris ? (
                           <FillHeart
-                            onClick={() => removeBookFromFavoris(id)}
+                            onClick={() =>
+                              removeBookFromFavoris(
+                                id,
+                                dispatch,
+                                collectionFavoris
+                              )
+                            }
                           />
                         ) : (
                           <StrokeHeart
-                            onClick={() => handleImageClick(googleBook)}
+                            onClick={() =>
+                              handleAddBookToFavorisAction(
+                                googleBook,
+                                dispatch,
+                                collectionFavoris
+                              )
+                            }
                           />
                         )}
                       </div>
@@ -217,7 +155,7 @@ export const Accueil = () => {
               {startIndex > 0 && (
                 <div className="flex justify-center mt-4">
                   <button
-                    className="bg-primary text-white px-4 py-2 rounded"
+                    className="bg-primary text-white px-4 py-2 rounded-full"
                     onClick={loadLessBooks}
                   >
                     Retour
@@ -226,7 +164,7 @@ export const Accueil = () => {
               )}
               <div className="flex justify-center mt-4">
                 <button
-                  className="bg-primary text-white px-4 py-2 rounded"
+                  className="bg-primary text-white px-4 py-2 rounded-full"
                   onClick={loadMoreBooks}
                 >
                   Charger plus

@@ -21,7 +21,7 @@ export const MyCollections = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/");
+      navigate("/connexion");
     }
     dispatch(fetchCollections());
   }, [userInfo]);
@@ -85,11 +85,11 @@ export const MyCollections = () => {
 
               return (
                 <Fragment key={collection.id}>
-                  <div className="w-44 h-36 relative bg-white shadow-lg rounded-lg">
+                  <div className="w-44 h-36 relative bg-white shadow-lg rounded-lg max-[376px]:w-36 max-[376px]:h-32 max-[321px]:w-28 max-[321px]:h-24">
                     <Link to={"/mescollections/collection/" + collectionId}>
                       <div
                         style={{ overflowWrap: "anywhere" }}
-                        className="uppercase font-bold max-w-full h-full text-center flex items-center justify-center"
+                        className="uppercase font-bold max-w-full h-full text-center flex items-center justify-center max-[376px]:text-sm"
                       >
                         {collection.name === "Favoris" ? (
                           <FillHeart />

@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { addBookToFavoris } from "../../actions/addBookToFavorisAction";
+import { fetchCollections } from "../../actions/myCollectionAction";
+import { removeBookFromFavoris } from "../../actions/removeBookFromFavoris";
 import { FillHeart } from "../../assets/svg/fillHeart";
 import { StrokeHeart } from "../../assets/svg/strokeHeart";
 import Layout from "../../components/layout";
 import { myAxios } from "../../config/axios/configAxios";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
+import { selectFetchCollections } from "../../config/redux/reduxCollection";
 import { TabTitle } from "../../utils/tabtitle";
 import { toastConfig } from "../../utils/toast/config";
 
@@ -15,8 +19,12 @@ export const CollectionDetails = () => {
 
   const navigate = useNavigate();
   const userInfo = useSelector(selectUserInfo);
+  const collections = useSelector(selectFetchCollections);
   const [collectionDetails, setCollectionDetails] = useState(null);
   const csrf = () => myAxios.get("sanctum/csrf-cookie");
+  const [collectionFavoris, setCollectionFavoris] = useState(null);
+  const [collectionsLogged, setCollectionsLogged] = useState(false);
+  const dispatch = useDispatch();
 
   let { id } = useParams();
 
@@ -32,10 +40,23 @@ export const CollectionDetails = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/");
+      navigate("/connexion");
     }
+    dispatch(fetchCollections());
     getCollectionDetails();
-  }, [userInfo]);
+  }, [userInfo, dispatch, navigate]);
+
+  useEffect(() => {
+    if (userInfo && collections && !collectionsLogged) {
+      setCollectionsLogged(true);
+
+      const favoris = collections.find(
+        (collection) => collection.name === "Favoris"
+      )?.id;
+
+      setCollectionFavoris(favoris);
+    }
+  }, [userInfo, collections, collectionsLogged]);
 
   const removeBookFromCollection = async (collectionId, bookId) => {
     try {
@@ -63,13 +84,22 @@ export const CollectionDetails = () => {
   return (
     <Layout>
       {collectionDetails && collectionDetails.books.length > 0 ? (
-        <div className="w-full grid 2xl:grid-cols-10 max-[768px]:grid-cols-3 grid-cols-5 gap-y-10 justify-items-center">
+        <div className="w-full grid 2xl:grid-cols-10 max-[768px]:grid-cols-2 grid-cols-5 gap-y-10 justify-items-center">
           {collectionDetails.books.map((book) => {
             let id = book.id;
             let title = book.title;
             let cover =
               book.cover_link ??
               "https://howfix.net/wp-content/uploads/2018/02/sIaRmaFSMfrw8QJIBAa8mA-article.png";
+
+            const isFavoris =
+              collectionFavoris &&
+              collectionsLogged &&
+              collections
+                .find((collection) => collection.id === collectionFavoris)
+                ?.books.some((book) => book.id === id);
+
+            console.log(isFavoris, collectionFavoris);
 
             return (
               <div
@@ -78,10 +108,22 @@ export const CollectionDetails = () => {
               >
                 <div className="h-52 shadow-xl w-fit flex flex-row relative rounded-lg">
                   <div className="absolute bg-white rounded-full p-1 shadow-lg -top-2 -left-2">
-                    {collectionDetails.name === "Favoris" ? (
-                      <FillHeart />
+                    {isFavoris ? (
+                      <FillHeart
+                        onClick={() =>
+                          removeBookFromFavoris(id, dispatch, collectionFavoris)
+                        }
+                      />
                     ) : (
-                      <StrokeHeart />
+                      <StrokeHeart
+                        onClick={() => {
+                          addBookToFavoris(
+                            dispatch,
+                            googleBook,
+                            collectionFavoris
+                          );
+                        }}
+                      />
                     )}
                   </div>
 

@@ -19,6 +19,7 @@ import { Error404 } from "./pages/error404";
 import { Favorites } from "./pages/favorites";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
+import { MyAccount } from "./pages/myAccount";
 import SearchResults from "./pages/searchResults";
 import { Signup } from "./pages/signup";
 import { SignupConfirmation } from "./pages/signupConfirmation";
@@ -69,6 +70,10 @@ const router = createBrowserRouter([
   {
     path: "/resultats-de-recherche",
     element: <SearchResults />,
+  },
+  {
+    path: "/moncompte",
+    element: <MyAccount />,
   },
 ]);
 

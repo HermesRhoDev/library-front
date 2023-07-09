@@ -43,7 +43,7 @@ export const BookDetails = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/");
+      navigate("/connexion");
     }
     getBookDetails();
   }, [userInfo]);
@@ -172,7 +172,10 @@ export const BookDetails = () => {
                 />
               </div>
             </div>
-            <div className="w-1/2 h-full p-5 max-[768px]:w-full max-[768px]:mt-24"></div>
+            <div className="w-1/2 h-full p-5 max-[768px]:w-full max-[768px]:mt-24 flex flex-col justify-center items-center">
+              <p className="font-bold text-2xl">Les commentaires arrivent !</p>
+              <p className="font-medium text-lg">Ils sont en cours de construction ;)</p>
+            </div>
           </div>
         ) : null}
       </Layout>
