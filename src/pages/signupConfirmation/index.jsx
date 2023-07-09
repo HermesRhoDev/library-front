@@ -13,7 +13,7 @@ export const SignupConfirmation = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate("/accueil");
     }
 
     if (registrationSucced != true) {

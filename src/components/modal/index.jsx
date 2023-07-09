@@ -4,6 +4,7 @@ import createCollection from "../../actions/createCollectionAction";
 import { fetchCollections } from "../../actions/myCollectionAction";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
 import { CreateColelctionValidation } from "../../utils/schema/yup/createCollectionValidation";
+import { toast } from "react-toastify";
 
 export const Modal = () => {
   const dispatch = useDispatch();
@@ -54,6 +55,7 @@ export const Modal = () => {
               const result = await dispatch(createCollection(values));
               if (createCollection.fulfilled.match(result)) {
                 dispatch(fetchCollections());
+                toast.success("Collection créée avec succès");
               }
             }}
           >

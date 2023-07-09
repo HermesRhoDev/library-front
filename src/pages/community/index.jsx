@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../../components/layout";
 import { myAxios } from "../../config/axios/configAxios";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
-import { Fragment } from "react";
 
 export const Community = () => {
   const [publicCollections, setPublicCollections] = useState([]);
@@ -16,14 +15,13 @@ export const Community = () => {
       const response = await myAxios.get("/api/public-collections");
       setPublicCollections(response.data.collections);
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
 
   useEffect(() => {
     if (!userInfo) {
-      navigate("/");
+      navigate("/connexion");
     }
     fetchPublicCollections();
   }, [userInfo]);
@@ -36,7 +34,9 @@ export const Community = () => {
             return (
               <Fragment key={publicCollection.id}>
                 <div className="w-44 h-36 relative bg-white shadow-lg rounded-lg">
-                  <Link to={"/mescollections/collection/" + publicCollection.id}>
+                  <Link
+                    to={"/mescollections/collection/" + publicCollection.id}
+                  >
                     <div
                       style={{ overflowWrap: "anywhere" }}
                       className="uppercase font-bold max-w-full h-full text-center flex items-center justify-center"

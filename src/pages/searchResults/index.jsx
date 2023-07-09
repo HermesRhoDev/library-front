@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Layout from "../../components/layout";
 import { selectUserInfo } from "../../config/redux/reduxAuth";
 
@@ -8,7 +8,7 @@ const SearchResults = () => {
   const location = useLocation();
   const { searchData } = location.state;
   const userInfo = useSelector(selectUserInfo);
-  console.log(searchData);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!userInfo) {
