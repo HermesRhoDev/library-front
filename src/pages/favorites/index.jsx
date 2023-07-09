@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { FillHeart } from "../../assets/svg/fillHeart";
 import { StrokeHeart } from "../../assets/svg/strokeHeart";
 import Layout from "../../components/layout";
+import { selectUserInfo } from "../../config/redux/reduxAuth";
 import { selectFetchCollections } from "../../config/redux/reduxCollection";
 
 export const Favorites = () => {
@@ -10,6 +12,14 @@ export const Favorites = () => {
   const favoriteCollection = collections.find(
     (collection) => collection.name === "Favoris"
   );
+  const navigate = useNavigate();
+  const userInfo = useSelector(selectUserInfo);
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate("/");
+    }
+  }, [userInfo]);
 
   return (
     <Layout>
@@ -20,7 +30,9 @@ export const Favorites = () => {
           {favoriteCollection.books.map((favoriteBook) => {
             let id = favoriteBook.id;
             let title = favoriteBook.title;
-            let cover_link = favoriteBook.cover_link;
+            let cover_link =
+              favoriteBook.cover_link ??
+              "https://howfix.net/wp-content/uploads/2018/02/sIaRmaFSMfrw8QJIBAa8mA-article.png";
             const isFavoris = favoriteCollection?.books.some(
               (book) => book.id === id
             );
@@ -40,12 +52,14 @@ export const Favorites = () => {
                       />
                     )}
                   </div>
-                  <img
-                    className="h-full rounded-lg w-32 cursor-pointer"
-                    src={cover_link}
-                    alt={title}
-                    onClick={() => console.log("googleBookClick")}
-                  />
+                  <Link to={"/accueil/livre-detail/" + id}>
+                    <img
+                      className="h-full rounded-lg w-32 cursor-pointer"
+                      src={cover_link}
+                      alt={title}
+                      onClick={() => console.log("googleBookClick")}
+                    />
+                  </Link>
                 </div>
                 <div
                   className="w-32 mt-2"
