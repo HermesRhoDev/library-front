@@ -60,7 +60,7 @@ This section contains a non-exhaustive list of frameworks/libraries that I used 
 <!-- CONTACT -->
 ## Contact
 
-Mathéo Guerrazzi - materrazzi.pro@gmail.com - [![LinkedIn][linkedin-shield]][linkedin-url]
+Mathéo Guerrazzi - materrazzi.pro@gmail.com - [LinkedIn](www.linkedin.com/in/mathéo-guerrazzi)
 
 Project Link: [https://github.com/HermesRhoDev/library-front](https://github.com/HermesRhoDev/library-front)
 
@@ -98,9 +98,6 @@ In this space you can find resources that helped me during the development of th
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: www.linkedin.com/in/mathéo-guerrazzi
-[product-screenshot]: images/screenshot.png
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
