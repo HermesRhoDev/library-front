@@ -1,8 +1,5 @@
 <a id="readme-top"></a>
 
-<!-- PROJECT SHIELDS -->
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -63,7 +60,7 @@ This section contains a non-exhaustive list of frameworks/libraries that I used 
 <!-- CONTACT -->
 ## Contact
 
-Mathéo Guerrazzi - materrazzi.pro@gmail.com
+Mathéo Guerrazzi - materrazzi.pro@gmail.com - [![LinkedIn][linkedin-shield]][linkedin-url]
 
 Project Link: [https://github.com/HermesRhoDev/library-front](https://github.com/HermesRhoDev/library-front)
 
