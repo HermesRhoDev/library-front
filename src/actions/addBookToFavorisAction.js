@@ -4,6 +4,13 @@ import { toastConfig } from "../utils/toast/config";
 import { csrf } from "./csrfAction";
 import { fetchCollections } from "./myCollectionAction";
 
+/**
+ * La fonction addBookToFavoris prend en entrée trois arguments : dispatch 
+ * (une fonction de Redux pour dispatcher des actions), 
+ * googleBookInfo (les détails du livre provenant de l'API Google Books)
+ * et collectionFavoris (le nom de la collection dans laquelle le livre doit être ajouté).
+ */
+
 export const addBookToFavoris = async (
   dispatch,
   googleBookInfo,

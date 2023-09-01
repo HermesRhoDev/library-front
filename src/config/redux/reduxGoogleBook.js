@@ -1,3 +1,16 @@
+/**
+ * Ce code crée un slice Redux nommé "googleBookApiSlice" qui gère l'état lié à la récupération 
+ * de livres depuis l'API Google Books. Il définit un état initial avec des propriétés telles 
+ * que "books" (contenant les données des livres récupérés depuis l'API), "isLoading" 
+ * (indiquant si une action est en cours d'exécution) et "hasError" 
+ * (indiquant si une erreur s'est produite). 
+ * Le slice gère l'action asynchrone "getBooks" en utilisant les reducers générés 
+ * automatiquement par Redux Toolkit pour mettre à jour l'état en fonction du statut 
+ * de cette action. Il exporte également des sélecteurs pour accéder à des parties 
+ * spécifiques de l'état dans les composants, et le reducer du slice pour être utilisé 
+ * dans le store Redux de l'application.
+ */
+
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { axiosGoogleBookApi } from "../axios/configAxiosGoogle";
 

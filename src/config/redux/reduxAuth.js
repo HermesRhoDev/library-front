@@ -1,3 +1,19 @@
+/**
+ * Ce code crée un slice Redux nommé "authSlice" qui gère l'état de l'authentification dans l'application. 
+ * Il définit un état initial avec des propriétés telles que "loading" 
+ * (indiquant si une action est en cours), "userInfo" 
+ * (contenant les informations de l'utilisateur connecté), 
+ * "error" (contenant les erreurs liées à l'authentification), 
+ * et "success" (indiquant si une action a réussi avec succès). 
+ * Le slice gère les actions d'inscription, de connexion, de déconnexion, 
+ * de récupération de l'utilisateur actuel et de mise à jour du profil. 
+ * Il utilise les reducers générés automatiquement par Redux Toolkit pour mettre à jour 
+ * l'état en fonction du statut de ces actions.
+ * Enfin, le code exporte des sélecteurs qui permettent d'accéder à des parties spécifiques 
+ * de l'état dans les composants, et le reducer du slice pour être utilisé 
+ * dans le store Redux de l'application.
+ */
+
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchCurrentUser } from "../../actions/fetchCurrentUser";
 import login from "../../actions/loginAction";
